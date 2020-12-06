@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import * as axios from 'axios';
 import useDebounce from './deboucer';
 import Song from '../models/song';
+import { Container, Row, Col } from 'react-grid-system';
+import Player from './Player';
 
 const SearchComponent = () => {
     const [ searchValue, setSearchValue ] = useState("")
@@ -39,10 +41,7 @@ const SearchComponent = () => {
             {
                 songs && songs.length > 0 &&
                 songs.map(s => 
-                    <div className="song-item">
-                        {s.title}
-                        <div className="song-author">{s.author}</div>
-                    </div>    
+                    <SongComponent song={s} />
                 )
             }
             </div>
@@ -54,3 +53,18 @@ const SearchComponent = () => {
 
 
 export default SearchComponent;
+
+const SongComponent = (props: any) => {
+    const s : Song = props.song;
+    return <Container>
+        <Row className="song-item">
+            <Col>
+                {s.title}
+                <div className="song-author">{s.author}</div>
+            </Col>
+            <Col>
+                <Player song={s}></Player>
+            </Col>
+        </Row>
+    </Container>;
+}

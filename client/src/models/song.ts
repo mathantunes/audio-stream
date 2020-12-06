@@ -10,6 +10,7 @@ interface Song {
     album_cover: string
     link: string
     preview_link: string
+    isPlaying?: boolean
 }
 
 export default Song;
