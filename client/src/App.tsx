@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
 import SearchComponent from './components/SearchComponent';
+import { initialState, reducer, StateProvider } from './reducer/reducer';
 
 function App() {
   return (
-    <div className="App">
-      <body className='App-body'>
-        <SearchComponent></SearchComponent>
-      </body>
-    </div>
+    <StateProvider reducer={useReducer(reducer, initialState)}>
+      <div className="App">
+        <body className='App-body'>
+          <SearchComponent></SearchComponent>
+        </body>
+      </div>
+    </StateProvider>
   );
 }
 

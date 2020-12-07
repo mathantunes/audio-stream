@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext, useReducer } from 'react';
 import { useState, useEffect } from 'react';
 import Song from '../models/song';
 import { FaPlay, FaPause } from 'react-icons/fa';
+import { StateContext } from '../reducer/reducer';
 
-const useAudio = (url: string): [boolean, () => void] => {
+const useAudio = (url: string): [boolean, () => void, () => void] => {
     const [audio, setAudio] = useState(new Audio(url));
     const [playing, setPlaying] = useState(false);
   
     const toggle = () => setPlaying(!playing);
+    const stop = () => setPlaying(false);
   
     useEffect(() => {
         playing ? audio.play() : audio.pause();
@@ -26,15 +28,22 @@ const useAudio = (url: string): [boolean, () => void] => {
       };
     }, []);
   
-    return [playing, toggle];
+    return [playing, toggle, stop];
   };
   
   const Player = (props: any) => {
     const song: Song = props.song;
-    const [ playing, toggle ] = useAudio(song.preview_link);
+    const [ state, dispatch ] = useContext<any>(StateContext);
+    const [ playing, toggle, stop ] = useAudio(song.preview_link);
+    if(playing && state?.nowPlaying?.id !== undefined && state?.nowPlaying?.id !== song.id){
+      stop()
+    }
     return (
       <div>
-        <button className='player-button' onClick={() => toggle()}>{playing ? <FaPause/> : <FaPlay/>}</button>
+        <button className='player-button' onClick={() => {
+          toggle()
+          dispatch({ type: 'NOW_PLAYING', song: {...song, isPlaying: !playing } as Song})
+        }}>{playing ? <FaPause/> : <FaPlay/>}</button>
       </div>
     );
   };

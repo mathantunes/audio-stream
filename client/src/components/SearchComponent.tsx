@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import * as axios from 'axios';
 import useDebounce from './deboucer';
 import Song from '../models/song';
-import { Container, Row, Col } from 'react-grid-system';
-import Player from './Player';
+import { Container, Col } from 'react-grid-system';
+import SongComponent from './SongComponent';
+import NowPlayingComponent from './NowPlayingComponent';
+import { StateContext } from '../reducer/reducer';
 
 const SearchComponent = () => {
     const [ searchValue, setSearchValue ] = useState("")
-    const [ songs, setSongs ] = useState<Song[]>([])
     const debouncedSearch = useDebounce(searchValue, 500);
-    
+    const [ state, dispatch ] = useContext<any>(StateContext);
+    const { songs } = state
     useEffect(
         () => {
             if(searchValue != ""){
@@ -22,7 +24,7 @@ const SearchComponent = () => {
 
     const fetchSearch = (search: string = "") => {
         axios.default.get(`http://localhost:3001/songs/${search}`).then(
-            dt => setSongs((dt?.data?.songs as Song[]))
+            dt => dispatch({ type: 'FETCHED_SONGS', songs: dt?.data?.songs as Song[] })
         )
     }
 
@@ -37,41 +39,25 @@ const SearchComponent = () => {
                     onChange={(e) => setSearchValue(e.target.value)} 
                 />
             </div>
-            <Container>
-                <Col>
-                        <div className='song-list'>
+            <Container fluid>
+                <Col xs={4} md={4}>
+                    <div className='song-list'>
                     {
                         songs && songs.length > 0 &&
-                        songs.map(s => 
-                            <SongComponent song={s} />
+                        songs.map((s :Song) => 
+                            <SongComponent song={s} dispatch={dispatch}></SongComponent>
                         )
                     }
                     </div>
                 </Col>
                 <Col>
-                    <div>Hello</div>
+                    <NowPlayingComponent/>
                 </Col>
             </Container>
         </div>
-        
     )
 }
 
 
 
 export default SearchComponent;
-
-const SongComponent = (props: any) => {
-    const s : Song = props.song;
-    return <Container fluid className="song-item">
-        <Row>
-            <Col>
-                {s.title}
-                <div className="song-author">{s.author}</div>
-            </Col>
-            <Col xs={1.5} md={1.5} className='song-player'>
-                <Player song={s}></Player>
-            </Col>
-        </Row>
-    </Container>;
-}
