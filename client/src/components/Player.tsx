@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Song from '../models/song';
+import { FaPlay, FaPause } from 'react-icons/fa';
 
 const useAudio = (url: string): [boolean, () => void] => {
     const [audio, setAudio] = useState(new Audio(url));
@@ -33,7 +34,7 @@ const useAudio = (url: string): [boolean, () => void] => {
     const [ playing, toggle ] = useAudio(song.preview_link);
     return (
       <div>
-        <button onClick={() => toggle()}>{playing ? "Pause" : "Play"}</button>
+        <button className='player-button' onClick={() => toggle()}>{playing ? <FaPause/> : <FaPlay/>}</button>
       </div>
     );
   };
