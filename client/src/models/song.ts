@@ -11,6 +11,7 @@ interface Song {
     link: string
     preview_link: string
     isPlaying?: boolean
+    preview_duration?: number
 }
 
 export default Song;

@@ -14,9 +14,12 @@ const NowPlayingComponent = () => {
                 
                 <div style={{fontWeight: "bold"}}>{song.title}</div>
                 <div>{song.author}</div>
+                { song?.preview_duration && !Number.isNaN(song?.preview_duration) && <div>{fmtMSS(song.preview_duration ?? 0)}</div> }
             </Col>
         </Container>
     )
 }
+
+const fmtMSS = (s: number) => (s-(s%=60))/60+(9<s?':':':0')+s
 
 export default NowPlayingComponent;

@@ -4,10 +4,9 @@ import Song from '../models/song';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import { StateContext } from '../reducer/reducer';
 
-const useAudio = (url: string): [boolean, () => void, () => void] => {
+const useAudio = (url: string): [boolean, () => void, () => void, number] => {
     const [audio, setAudio] = useState(new Audio(url));
     const [playing, setPlaying] = useState(false);
-  
     const toggle = () => setPlaying(!playing);
     const stop = () => setPlaying(false);
   
@@ -28,13 +27,13 @@ const useAudio = (url: string): [boolean, () => void, () => void] => {
       };
     }, []);
   
-    return [playing, toggle, stop];
+    return [playing, toggle, stop, audio?.duration ?? 0];
   };
   
   const Player = (props: any) => {
     const song: Song = props.song;
     const [ state, dispatch ] = useContext<any>(StateContext);
-    const [ playing, toggle, stop ] = useAudio(song.preview_link);
+    const [ playing, toggle, stop, dur ] = useAudio(song.preview_link);
     if(playing && state?.nowPlaying?.id !== undefined && state?.nowPlaying?.id !== song.id){
       stop()
     }
@@ -42,7 +41,7 @@ const useAudio = (url: string): [boolean, () => void, () => void] => {
       <div>
         <button className='player-button' onClick={() => {
           toggle()
-          dispatch({ type: 'NOW_PLAYING', song: {...song, isPlaying: !playing } as Song})
+          dispatch({ type: 'NOW_PLAYING', song: {...song, isPlaying: !playing, preview_duration: Math.ceil(dur) } as Song})
         }}>{playing ? <FaPause/> : <FaPlay/>}</button>
       </div>
     );
