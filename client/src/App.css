@@ -94,3 +94,17 @@
   font-size: 12px;
   font-style: italic;
 }
+
+.now-playing {
+  height: 100%;
+  text-align: center;
+  color: #b1b2b6;
+  font-size: 15px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 300px;
+  margin-left: 200px;
+  left: 200px;
+}

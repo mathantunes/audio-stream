@@ -5,7 +5,7 @@ import Player from './Player';
 
 const SongComponent = (props: any) => {
     const s : Song = props.song;
-    return <Container fluid className="song-item">
+    return <Container fluid className="song-item" style={{zIndex: 1}}>
         <Row>
             <Col>
                 {s.title}
