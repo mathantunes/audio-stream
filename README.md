@@ -29,3 +29,10 @@ npm start # port 3000
 ### Server API
 
 * List songs on /songs/:search
+
+
+## Todos:
+
+* Automatic play next on the list
+* Playlist queue
+* Click album to fetch album's songs
