@@ -30,7 +30,7 @@ const SearchComponent = () => {
 
     return (
         <div>
-            <div className="search-wrapper">
+            <div className="search-wrapper" style={{zIndex: 1}}>
                 <input
                     className="search-bar"
                     type="text" 
