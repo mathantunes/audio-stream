@@ -6,6 +6,7 @@ import { StateContext } from '../reducer/reducer';
 const NowPlayingComponent = () => {
     const [ state ] = useContext<any>(StateContext);
     const song: Song = state.nowPlaying
+    const validNumberDuration = !isNaN(song?.preview_duration ?? 0)
     return (
         <Container  xl className="now-playing" style={{zIndex: 0}}>
             <Col sm={2}>
@@ -14,7 +15,7 @@ const NowPlayingComponent = () => {
                 
                 <div style={{fontWeight: "bold"}}>{song.title}</div>
                 <div>{song.author}</div>
-                { song?.preview_duration && !Number.isNaN(song?.preview_duration) && <div>{fmtMSS(song.preview_duration ?? 0)}</div> }
+                { validNumberDuration && <div>{fmtMSS(song.preview_duration ?? 0)}</div> }
             </Col>
         </Container>
     )
